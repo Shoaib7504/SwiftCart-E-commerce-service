@@ -10,7 +10,7 @@ const loadContainer = () => {
     const section = document.createElement('section')
     section.innerHTML = `
       <!-- Hero Section -->
-        <section id="home" class="bg-[url('./banner-image.png')] bg-cover bg-center  h-[500px] flex items-center">
+        <section class="bg-[url('./banner-image.png')] bg-cover bg-center  h-[500px] flex items-center">
             <div class="container mx-auto px-4">
                 <div class="max-w-2xl">
                     <h1 class="text-white text-5xl md:text-6xl font-bold mb-4">Best Collection For You</h1>
@@ -26,7 +26,7 @@ const loadContainer = () => {
             </div>
         </section>
 
-    <section class="py-16 bg-gray-50">
+    <section  class="py-16 bg-gray-50">
             <div class="container mx-auto px-4">
                 <h2 class="text-4xl font-bold text-center mb-3">Why Choose Us</h2>
                 <p class="text-gray-600 text-center mb-12">
@@ -179,13 +179,25 @@ const loadCategory = () => {
         )
 }
 
+const loadProducts = () => {
+    fetch('https://fakestoreapi.com/products')
+        .then(res => res.json())
+        .then(data => displayProducts(data)
+
+        );
+}
+
+
 const displayCategory = (categories) => {
 
     const categoryContainer = document.getElementById('main-container')
-    categoryContainer.innerHTML =   `  <h1 class="font-bold text-center text-4xl">Our products</h1>
-    
+    categoryContainer.innerHTML = `  <h1 class="font-bold text-center mt-6 mb-6 text-4xl">Our products</h1>
+        
+       <section id="products-container"  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></section>
     
     `;
+
+
 
 
     categories.forEach(category => {
@@ -194,13 +206,68 @@ const displayCategory = (categories) => {
         div.innerHTML = `
                          
                        <button
-                         class="px-5 py-2 mt-4 rounded-full  bg-gray-200 text-gray-700 hover:bg-pink-600 hover:text-white transition duration-300">
+                         class="px-5 py-2  mt-4 rounded-full  bg-gray-200 text-gray-700 hover:bg-pink-600 hover:text-white transition duration-300">
                          ${category}
                           </button>
                  `
         categoryContainer.append(div)
     });
 
+    
+
+
+    loadProducts()
+
+}
+
+const displayProducts = (products) => {
+
+    const categoryContainer = document.getElementById('products-container')
+
+    products.forEach(product => {
+
+        const productsCards = document.createElement('section')
+        productsCards.innerHTML = `
+         <div
+                    class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition product-card">
+                    <div class="relative bg-gray-100 h-70 h-cover overflow-hidden">
+                        <img src=${product.image} />
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between">
+                            <span class="inline-block bg-indigo-100 text-indigo-600 text-xs px-3 py-1 rounded-full mb-2">
+                           ${product.category}
+                        </span>
+                        <div class="flex items-center gap-1 mb-3">
+                            <span><i class="fa-solid fa-star" style="color: rgba(255, 212, 59, 1);"></i></span>
+                            <span class="text-sm">${product.rating.rate}</h3>
+                                (${product.rating.count})</span>
+                        </div>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">${product.title}</h3>
+                        
+                        <div class="text-2xl font-bold mb-4">$${product.price}</div>
+                        <div class="flex gap-2">
+                            <button
+                                class="flex-1 border border-gray-300 text-gray-700 py-2 rounded hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                               <span> <i class="fa-solid fa-eye"></i></span>
+                                Details
+                            </button>
+                            <button
+                                class="flex-1 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition flex items-center justify-center gap-2 add-to-cart">
+                               <span><i class="fa-solid fa-cart-arrow-down" style="color: rgba(230, 232, 236, 1.00);"></i></span>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+       
+                
+                
+                `
+        categoryContainer.append(productsCards)
+
+    });
 
 }
 
